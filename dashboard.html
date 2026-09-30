@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — AI Resume Analyzer</title>
+  <meta name="description" content="Your AI Resume Analyzer dashboard — view recent analyses, scores, and quick upload." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app-wrapper">
+
+  <!-- ═══════════ SIDEBAR ════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">AI</div>
+        <div class="sidebar-brand-text">
+          <div class="brand-title">AI Resume Analyzer</div>
+          <div class="brand-sub">Powered by Gemini AI</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main Menu</div>
+
+      <div class="nav-item">
+        <a href="dashboard.html" class="nav-link active" id="nav-dashboard">
+          <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="upload.html" class="nav-link" id="nav-upload">
+          <i class="bi bi-cloud-upload"></i> Upload Resume
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="history.html" class="nav-link" id="nav-reports">
+          <i class="bi bi-file-earmark-bar-graph"></i> My Reports
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="history.html" class="nav-link" id="nav-history">
+          <i class="bi bi-clock-history"></i> Resume History
+        </a>
+      </div>
+
+      <div class="nav-section-label" style="margin-top:10px;">Account</div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-profile" onclick="showToast('Profile page coming after backend integration.','info');return false;">
+          <i class="bi bi-person-circle"></i> Profile
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-settings" onclick="showToast('Settings coming after backend integration.','info');return false;">
+          <i class="bi bi-gear"></i> Settings
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="nav-item">
+        <a href="login.html" class="nav-link logout-link">
+          <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════ MAIN CONTENT ══════════════════════ -->
+  <div class="main-content">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="header-search">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" placeholder="Search analyses..." />
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="header-icon-btn" aria-label="Notifications"
+          onclick="showToast('You have 2 new notifications.','info')">
+          <i class="bi bi-bell"></i>
+          <span class="notif-badge"></span>
+        </button>
+        <div class="user-profile-btn" id="profileDropdownBtn">
+          <div class="avatar-placeholder">SI</div>
+          <span class="user-name">Saymun Islam</span>
+          <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <div>
+          <div class="welcome-title">Welcome back, Saymun Islam 👋</div>
+          <div class="welcome-sub">Here's your resume analysis overview. Let's boost your career!</div>
+        </div>
+        <a href="upload.html" class="btn btn-white" style="z-index:1;position:relative;">
+          <i class="bi bi-cloud-upload"></i> Upload Resume
+        </a>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-icon icon-purple">
+            <i class="bi bi-file-earmark-text"></i>
+          </div>
+          <div class="stat-card-label">Total Analyses</div>
+          <div class="stat-card-value">12</div>
+          <div class="stat-card-meta"><span class="up">↑ 3</span> this month</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-icon icon-orange">
+            <i class="bi bi-bar-chart"></i>
+          </div>
+          <div class="stat-card-label">Average Score</div>
+          <div class="stat-score-display">
+            <span class="score-num">78</span>
+            <span class="score-den">/100</span>
+          </div>
+          <div class="stat-card-meta">Best Progress</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-icon icon-green">
+            <i class="bi bi-speedometer2"></i>
+          </div>
+          <div class="stat-card-label">ATS Score</div>
+          <div class="stat-score-display">
+            <span class="score-num" style="color:var(--accent-green);">82</span>
+            <span class="score-den">%</span>
+          </div>
+          <div class="stat-card-meta">Above Average</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-icon icon-blue">
+            <i class="bi bi-lightbulb"></i>
+          </div>
+          <div class="stat-card-label">Suggestions</div>
+          <div class="stat-card-value">24</div>
+          <div class="stat-card-meta">Total Received</div>
+        </div>
+      </div>
+
+      <!-- Recent Analysis Table -->
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="bi bi-clock-history" style="color:var(--primary);margin-right:7px;"></i>Recent Analysis</h3>
+          <a href="history.html" class="view-all-link">View All →</a>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Resume Name</th>
+                <th>Date</th>
+                <th>Resume Score</th>
+                <th>ATS Score</th>
+                <th class="action-col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardRecentTbody">
+              <!-- Populated by dashboard.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Actions Row -->
+      <div class="two-col" style="margin-top:16px;">
+
+        <!-- Quick Upload -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="bi bi-rocket-takeoff" style="color:var(--primary);margin-right:7px;"></i>Quick Actions</h3>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <a href="upload.html" class="btn btn-primary">
+                <i class="bi bi-cloud-upload"></i> Upload New Resume
+              </a>
+              <a href="history.html" class="btn btn-outline">
+                <i class="bi bi-clock-history"></i> View Full History
+              </a>
+              <a href="analysis.html" class="btn btn-ghost">
+                <i class="bi bi-file-earmark-bar-graph"></i> Latest Report
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips-card">
+          <h3><i class="bi bi-lightbulb-fill" style="color:var(--accent-orange);margin-right:7px;"></i>Tips for Better Results</h3>
+          <div class="tip-item">
+            <i class="bi bi-check-circle-fill"></i>
+            Use a simple and clean resume format
+          </div>
+          <div class="tip-item">
+            <i class="bi bi-check-circle-fill"></i>
+            Make sure your resume is up-to-date
+          </div>
+          <div class="tip-item">
+            <i class="bi bi-check-circle-fill"></i>
+            Include relevant skills and experience
+          </div>
+          <div class="tip-item">
+            <i class="bi bi-check-circle-fill"></i>
+            Avoid images and tables for better ATS results
+          </div>
+          <div class="tip-item">
+            <i class="bi bi-check-circle-fill"></i>
+            Add numbers and metrics to show your impact
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div><!-- end main-content -->
+</div><!-- end app-wrapper -->
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

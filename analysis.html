@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis Report — AI Resume Analyzer</title>
+  <meta name="description" content="View your AI-powered resume analysis report with ATS score, content score, strengths, and improvement suggestions." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app-wrapper">
+
+  <!-- ═══════════ SIDEBAR ════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">AI</div>
+        <div class="sidebar-brand-text">
+          <div class="brand-title">AI Resume Analyzer</div>
+          <div class="brand-sub">Powered by Gemini AI</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main Menu</div>
+      <div class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-grid-1x2"></i> Dashboard</a></div>
+      <div class="nav-item"><a href="upload.html" class="nav-link"><i class="bi bi-cloud-upload"></i> Upload Resume</a></div>
+      <div class="nav-item"><a href="history.html" class="nav-link active"><i class="bi bi-file-earmark-bar-graph"></i> My Reports</a></div>
+      <div class="nav-item"><a href="history.html" class="nav-link"><i class="bi bi-clock-history"></i> Resume History</a></div>
+      <div class="nav-section-label" style="margin-top:10px;">Account</div>
+      <div class="nav-item"><a href="#" class="nav-link" onclick="showToast('Profile coming soon.','info');return false;"><i class="bi bi-person-circle"></i> Profile</a></div>
+      <div class="nav-item"><a href="#" class="nav-link" onclick="showToast('Settings coming soon.','info');return false;"><i class="bi bi-gear"></i> Settings</a></div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item"><a href="login.html" class="nav-link logout-link"><i class="bi bi-box-arrow-left"></i> Logout</a></div>
+    </div>
+  </aside>
+
+  <!-- ═══════════ MAIN CONTENT ══════════════════════ -->
+  <div class="main-content">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+        <div class="header-search">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" placeholder="Search..." />
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="header-icon-btn" onclick="showToast('No new notifications.','info')">
+          <i class="bi bi-bell"></i>
+          <span class="notif-badge"></span>
+        </button>
+        <div class="user-profile-btn">
+          <div class="avatar-placeholder">SI</div>
+          <span class="user-name">Saymun Islam</span>
+          <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+
+      <!-- Report Header Bar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <button class="back-btn" onclick="window.location.href='history.html'">
+            <i class="bi bi-arrow-left"></i> Back to Reports
+          </button>
+          <h2 style="font-size:22px;font-weight:800;margin-top:6px;">Analysis Report</h2>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:4px;font-size:13px;color:var(--text-secondary);">
+            <span><i class="bi bi-file-earmark-pdf-fill" style="color:#EF4444;"></i> Software_Engineer_Resume.pdf</span>
+            <span><i class="bi bi-calendar3"></i> 20 May 2024, 10:30 AM</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="downloadReportBtn">
+          <i class="bi bi-download"></i> Download Report
+        </button>
+      </div>
+
+      <!-- Score Cards -->
+      <div class="score-cards-grid">
+
+        <!-- Resume Score -->
+        <div class="score-card">
+          <div class="score-card-title">Resume Score</div>
+          <div class="score-ring-wrapper">
+            <svg class="score-ring-svg" viewBox="0 0 80 80">
+              <circle class="score-ring-track" cx="40" cy="40" r="32"/>
+              <circle class="score-ring-fill purple" cx="40" cy="40" r="32" data-pct="85"/>
+            </svg>
+            <div class="score-ring-text">
+              <div class="ring-num">85</div>
+              <div class="ring-den">/100</div>
+            </div>
+          </div>
+          <span class="score-card-rating rating-good">Very Good</span>
+        </div>
+
+        <!-- ATS Score -->
+        <div class="score-card">
+          <div class="score-card-title">ATS Score</div>
+          <div class="score-ring-wrapper">
+            <svg class="score-ring-svg" viewBox="0 0 80 80">
+              <circle class="score-ring-track" cx="40" cy="40" r="32"/>
+              <circle class="score-ring-fill green" cx="40" cy="40" r="32" data-pct="88"/>
+            </svg>
+            <div class="score-ring-text">
+              <div class="ring-num">88</div>
+              <div class="ring-den">%</div>
+            </div>
+          </div>
+          <span class="score-card-rating rating-excellent">Excellent</span>
+        </div>
+
+        <!-- Content Score -->
+        <div class="score-card">
+          <div class="score-card-title">Content Score</div>
+          <div class="score-ring-wrapper">
+            <svg class="score-ring-svg" viewBox="0 0 80 80">
+              <circle class="score-ring-track" cx="40" cy="40" r="32"/>
+              <circle class="score-ring-fill orange" cx="40" cy="40" r="32" data-pct="82"/>
+            </svg>
+            <div class="score-ring-text">
+              <div class="ring-num">82</div>
+              <div class="ring-den">/100</div>
+            </div>
+          </div>
+          <span class="score-card-rating rating-good">Good</span>
+        </div>
+
+        <!-- Grammar Score -->
+        <div class="score-card">
+          <div class="score-card-title">Grammar Score</div>
+          <div class="score-ring-wrapper">
+            <svg class="score-ring-svg" viewBox="0 0 80 80">
+              <circle class="score-ring-track" cx="40" cy="40" r="32"/>
+              <circle class="score-ring-fill blue" cx="40" cy="40" r="32" data-pct="78"/>
+            </svg>
+            <div class="score-ring-text">
+              <div class="ring-num">78</div>
+              <div class="ring-den">/100</div>
+            </div>
+          </div>
+          <span class="score-card-rating rating-avg">Average</span>
+        </div>
+
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-overview">Overview</button>
+        <button class="tab-btn" data-tab="tab-skills">Skills</button>
+        <button class="tab-btn" data-tab="tab-keywords">Keywords</button>
+        <button class="tab-btn" data-tab="tab-suggestions">AI Suggestions</button>
+      </div>
+
+      <!-- ─── TAB: OVERVIEW ─────────────────────── -->
+      <div class="tab-panel active" id="tab-overview">
+        <div class="two-col">
+          <!-- Strengths -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="bi bi-hand-thumbs-up-fill" style="color:var(--accent-green);margin-right:7px;"></i>Strengths</h3>
+            </div>
+            <div class="card-body">
+              <ul class="strengths-list">
+                <li>
+                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
+                  Good use of action verbs throughout the resume
+                </li>
+                <li>
+                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
+                  Relevant technical skills are clearly mentioned
+                </li>
+                <li>
+                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
+                  Clear and well-structured work experience section
+                </li>
+                <li>
+                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
+                  Well-organized sections with proper headings
+                </li>
+                <li>
+                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
+                  Contact information is complete and professional
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Areas to Improve -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="bi bi-arrow-up-circle-fill" style="color:var(--accent-orange);margin-right:7px;"></i>Areas to Improve</h3>
+            </div>
+            <div class="card-body">
+              <ul class="improve-list">
+                <li>
+                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
+                  Add more quantifiable achievements with metrics and numbers
+                </li>
+                <li>
+                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
+                  Improve and expand the professional summary section
+                </li>
+                <li>
+                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
+                  Include more industry-relevant keywords for ATS score
+                </li>
+                <li>
+                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
+                  Check grammar in a few areas of the resume
+                </li>
+                <li>
+                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
+                  Consider adding certifications if any are relevant
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── TAB: SKILLS ───────────────────────── -->
+      <div class="tab-panel" id="tab-skills">
+        <div class="two-col">
+          <!-- Top Skills Found -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Top Skills Found</h3>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+                <span class="skill-tag matched">Python</span>
+                <span class="skill-tag matched">JavaScript</span>
+                <span class="skill-tag matched">SQL</span>
+                <span class="skill-tag matched">React</span>
+                <span class="skill-tag matched">Git</span>
+                <span class="skill-tag default">Docker</span>
+                <span class="skill-tag default">REST API</span>
+                <span class="skill-tag default">Linux</span>
+              </div>
+
+              <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">
+                Missing / Recommended Skills
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="skill-tag missing">AWS</span>
+                <span class="skill-tag missing">System Design</span>
+                <span class="skill-tag missing">CI/CD</span>
+                <span class="skill-tag partial">Kubernetes</span>
+                <span class="skill-tag missing">GraphQL</span>
+                <span class="skill-tag missing">Ansible</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills Analysis -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Skills Analysis</h3>
+            </div>
+            <div class="card-body">
+              <div class="skill-bar-item">
+                <div class="skill-bar-label">
+                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-green);display:inline-block;margin-right:6px;"></span>Matched Skills</span>
+                  <span style="font-weight:700;color:var(--accent-green);">65%</span>
+                </div>
+                <div class="skill-bar-track">
+                  <div class="skill-bar-fill" style="width:65%;background:linear-gradient(90deg,var(--accent-green),#34D399);"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-label">
+                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-red);display:inline-block;margin-right:6px;"></span>Missing Skills</span>
+                  <span style="font-weight:700;color:var(--accent-red);">22%</span>
+                </div>
+                <div class="skill-bar-track">
+                  <div class="skill-bar-fill" style="width:22%;background:linear-gradient(90deg,var(--accent-red),#F87171);"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-label">
+                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-orange);display:inline-block;margin-right:6px;"></span>Partial Match</span>
+                  <span style="font-weight:700;color:var(--accent-orange);">13%</span>
+                </div>
+                <div class="skill-bar-track">
+                  <div class="skill-bar-fill" style="width:13%;background:linear-gradient(90deg,var(--accent-orange),#FCD34D);"></div>
+                </div>
+              </div>
+
+              <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border-light);">
+                <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Keyword Match</div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:6px;">
+                  <span>Good match with job description</span>
+                  <span style="color:var(--accent-green);">78%</span>
+                </div>
+                <div class="kw-match-bar">
+                  <div class="kw-match-fill" style="width:78%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── TAB: KEYWORDS ─────────────────────── -->
+      <div class="tab-panel" id="tab-keywords">
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>Found Keywords</h3>
+              <span class="badge badge-success">32 found</span>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="skill-tag matched">Software Engineer</span>
+                <span class="skill-tag matched">Python</span>
+                <span class="skill-tag matched">JavaScript</span>
+                <span class="skill-tag matched">React</span>
+                <span class="skill-tag matched">Node.js</span>
+                <span class="skill-tag matched">REST API</span>
+                <span class="skill-tag matched">SQL</span>
+                <span class="skill-tag matched">Git</span>
+                <span class="skill-tag matched">Agile</span>
+                <span class="skill-tag matched">Team Leadership</span>
+                <span class="skill-tag matched">Problem Solving</span>
+                <span class="skill-tag matched">Communication</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Missing Keywords</h3>
+              <span class="badge badge-danger">8 missing</span>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+                <span class="skill-tag missing">AWS</span>
+                <span class="skill-tag missing">DevOps</span>
+                <span class="skill-tag missing">Microservices</span>
+                <span class="skill-tag missing">CI/CD</span>
+                <span class="skill-tag missing">System Design</span>
+                <span class="skill-tag missing">Kubernetes</span>
+                <span class="skill-tag missing">GraphQL</span>
+                <span class="skill-tag missing">Cloud</span>
+              </div>
+              <div style="font-size:12px;color:var(--text-secondary);background:var(--primary-bg);padding:12px;border-radius:var(--radius-md);border:1px solid #DDD6FE;">
+                <i class="bi bi-info-circle-fill" style="color:var(--primary);margin-right:5px;"></i>
+                Add these keywords naturally to your resume to improve your ATS score.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── TAB: AI SUGGESTIONS ───────────────── -->
+      <div class="tab-panel" id="tab-suggestions">
+        <div class="ai-suggestion-card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <div style="width:36px;height:36px;background:var(--primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:white;font-size:16px;">
+              <i class="bi bi-stars"></i>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px;">AI Powered Suggestions</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Personalized suggestions to improve your resume</div>
+            </div>
+          </div>
+
+          <div class="suggestion-item">
+            <div class="suggestion-item-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="suggestion-item-text">
+              <h4>Add Quantifiable Achievements</h4>
+              <p>Include numbers and metrics to showcase your impact in past roles. E.g., "Improved performance by 40%"</p>
+            </div>
+            <span class="suggestion-priority priority-high">High Impact</span>
+          </div>
+
+          <div class="suggestion-item">
+            <div class="suggestion-item-icon"><i class="bi bi-file-text"></i></div>
+            <div class="suggestion-item-text">
+              <h4>Improve Summary Section</h4>
+              <p>Make your summary more concise and engaging to grab attention. Lead with your strongest value proposition.</p>
+            </div>
+            <span class="suggestion-priority priority-high">High Impact</span>
+          </div>
+
+          <div class="suggestion-item">
+            <div class="suggestion-item-icon"><i class="bi bi-key"></i></div>
+            <div class="suggestion-item-text">
+              <h4>Add More Relevant Keywords</h4>
+              <p>Include industry-relevant keywords like AWS, Kubernetes, and System Design to improve ATS score.</p>
+            </div>
+            <span class="suggestion-priority priority-medium">Medium Impact</span>
+          </div>
+
+          <div class="suggestion-item">
+            <div class="suggestion-item-icon"><i class="bi bi-award"></i></div>
+            <div class="suggestion-item-text">
+              <h4>Consider Adding Certifications</h4>
+              <p>Certifications like AWS Solutions Architect or Google Cloud can significantly increase your credibility.</p>
+            </div>
+            <span class="suggestion-priority priority-low">Low Impact</span>
+          </div>
+
+          <div class="suggestion-item">
+            <div class="suggestion-item-icon"><i class="bi bi-spellcheck"></i></div>
+            <div class="suggestion-item-text">
+              <h4>Grammar &amp; Language Check</h4>
+              <p>A few minor grammar issues were detected. Review your experience section for tense consistency.</p>
+            </div>
+            <span class="suggestion-priority priority-medium">Medium Impact</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
