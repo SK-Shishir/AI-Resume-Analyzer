@@ -33,8 +33,26 @@
       <div class="nav-item"><a href="history.html" class="nav-link active"><i class="bi bi-file-earmark-bar-graph"></i> My Reports</a></div>
       <div class="nav-item"><a href="history.html" class="nav-link"><i class="bi bi-clock-history"></i> Resume History</a></div>
       <div class="nav-section-label" style="margin-top:10px;">Account</div>
-      <div class="nav-item"><a href="#" class="nav-link" onclick="showToast('Profile coming soon.','info');return false;"><i class="bi bi-person-circle"></i> Profile</a></div>
-      <div class="nav-item"><a href="#" class="nav-link" onclick="showToast('Settings coming soon.','info');return false;"><i class="bi bi-gear"></i> Settings</a></div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-account-settings">
+          <i class="bi bi-person-gear"></i> Account Settings
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-help-center">
+          <i class="bi bi-question-circle"></i> Help Center
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-contact-us">
+          <i class="bi bi-chat-dots"></i> Contact Us
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-language">
+          <i class="bi bi-globe"></i> Language
+        </a>
+      </div>
     </nav>
     <div class="sidebar-footer">
       <div class="nav-item"><a href="login.html" class="nav-link logout-link"><i class="bi bi-box-arrow-left"></i> Logout</a></div>
@@ -58,10 +76,49 @@
           <i class="bi bi-bell"></i>
           <span class="notif-badge"></span>
         </button>
-        <div class="user-profile-btn">
-          <div class="avatar-placeholder">SK</div>
-          <span class="user-name">Shishir Chandro</span>
-          <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+        <div class="user-profile-wrapper">
+          <div class="user-profile-btn" id="profileDropdownBtn">
+            <div class="avatar-placeholder" id="userAvatar">U</div>
+            <span class="user-name" id="userNameHeader">User</span>
+            <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+          </div>
+
+          <!-- Profile Dropdown Menu -->
+          <div class="profile-dropdown-menu" id="profileDropdownMenu">
+            <div class="dropdown-user-info">
+              <div class="dropdown-user-name" id="dropdownUserName">User</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">user@example.com</div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnAccountSettings">
+              <i class="bi bi-person-gear"></i>
+              <span>Account settings</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnHelpCenter">
+              <i class="bi bi-question-circle"></i>
+              <span>Help center</span>
+            </a>
+            <a href="#" class="dropdown-item" id="btnContactUs">
+              <i class="bi bi-chat-dots"></i>
+              <span>Contact us</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item dropdown-item-between" id="btnLanguage">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-globe"></i>
+                <span>Language</span>
+              </div>
+              <div class="dropdown-lang-badge">
+                <span id="currentLangLabel">English</span>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item text-danger logout-link" id="dropdownLogoutBtn">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Log out</span>
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -76,14 +133,20 @@
             <i class="bi bi-arrow-left"></i> Back to Reports
           </button>
           <h2 style="font-size:22px;font-weight:800;margin-top:6px;">Analysis Report</h2>
-          <div style="display:flex;align-items:center;gap:14px;margin-top:4px;font-size:13px;color:var(--text-secondary);">
-            <span><i class="bi bi-file-earmark-pdf-fill" style="color:#EF4444;"></i> Software_Engineer_Resume.pdf</span>
-            <span><i class="bi bi-calendar3"></i> 20 May 2024, 10:30 AM</span>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:4px;font-size:13px;color:var(--text-secondary);flex-wrap:wrap;">
+            <span id="reportFileName"><i class="bi bi-file-earmark-pdf-fill" style="color:#EF4444;"></i> Loading resume...</span>
+            <span id="reportDate"><i class="bi bi-calendar3"></i> Just now</span>
+            <span id="reportJobBadge" class="badge badge-purple" style="font-size:12px;">Software Engineer</span>
           </div>
         </div>
-        <button class="btn btn-primary" id="downloadReportBtn">
-          <i class="bi bi-download"></i> Download Report
-        </button>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-outline" id="topDownloadImprovedCvDocxBtn" style="display:inline-flex;align-items:center;gap:8px;background:#ffffff;border-color:#CBD5E1;">
+            <i class="bi bi-file-earmark-word-fill" style="color:#2563EB;font-size:16px;"></i> Download Word (.docx)
+          </button>
+          <button class="btn btn-primary" id="topDownloadImprovedCvBtn" style="display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(37,99,235,0.35);">
+            <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF
+          </button>
+        </div>
       </div>
 
       <!-- Score Cards -->
@@ -95,14 +158,14 @@
           <div class="score-ring-wrapper">
             <svg class="score-ring-svg" viewBox="0 0 80 80">
               <circle class="score-ring-track" cx="40" cy="40" r="32"/>
-              <circle class="score-ring-fill purple" cx="40" cy="40" r="32" data-pct="85"/>
+              <circle class="score-ring-fill purple" id="resumeScoreFill" cx="40" cy="40" r="32" data-pct="0"/>
             </svg>
             <div class="score-ring-text">
-              <div class="ring-num">85</div>
+              <div class="ring-num" id="resumeScoreVal">--</div>
               <div class="ring-den">/100</div>
             </div>
           </div>
-          <span class="score-card-rating rating-good">Very Good</span>
+          <span class="score-card-rating rating-good" id="resumeScoreRating">Calculating</span>
         </div>
 
         <!-- ATS Score -->
@@ -111,14 +174,14 @@
           <div class="score-ring-wrapper">
             <svg class="score-ring-svg" viewBox="0 0 80 80">
               <circle class="score-ring-track" cx="40" cy="40" r="32"/>
-              <circle class="score-ring-fill green" cx="40" cy="40" r="32" data-pct="88"/>
+              <circle class="score-ring-fill green" id="atsScoreFill" cx="40" cy="40" r="32" data-pct="0"/>
             </svg>
             <div class="score-ring-text">
-              <div class="ring-num">88</div>
+              <div class="ring-num" id="atsScoreVal">--</div>
               <div class="ring-den">%</div>
             </div>
           </div>
-          <span class="score-card-rating rating-excellent">Excellent</span>
+          <span class="score-card-rating rating-excellent" id="atsScoreRating">Calculating</span>
         </div>
 
         <!-- Content Score -->
@@ -127,30 +190,30 @@
           <div class="score-ring-wrapper">
             <svg class="score-ring-svg" viewBox="0 0 80 80">
               <circle class="score-ring-track" cx="40" cy="40" r="32"/>
-              <circle class="score-ring-fill orange" cx="40" cy="40" r="32" data-pct="82"/>
+              <circle class="score-ring-fill orange" id="contentScoreFill" cx="40" cy="40" r="32" data-pct="0"/>
             </svg>
             <div class="score-ring-text">
-              <div class="ring-num">82</div>
+              <div class="ring-num" id="contentScoreVal">--</div>
               <div class="ring-den">/100</div>
             </div>
           </div>
-          <span class="score-card-rating rating-good">Good</span>
+          <span class="score-card-rating rating-good" id="contentScoreRating">Calculating</span>
         </div>
 
-        <!-- Grammar Score -->
+        <!-- Match Score -->
         <div class="score-card">
-          <div class="score-card-title">Grammar Score</div>
+          <div class="score-card-title">Job Match Score</div>
           <div class="score-ring-wrapper">
             <svg class="score-ring-svg" viewBox="0 0 80 80">
               <circle class="score-ring-track" cx="40" cy="40" r="32"/>
-              <circle class="score-ring-fill blue" cx="40" cy="40" r="32" data-pct="78"/>
+              <circle class="score-ring-fill blue" id="matchScoreFill" cx="40" cy="40" r="32" data-pct="0"/>
             </svg>
             <div class="score-ring-text">
-              <div class="ring-num">78</div>
-              <div class="ring-den">/100</div>
+              <div class="ring-num" id="matchScoreVal">--</div>
+              <div class="ring-den">%</div>
             </div>
           </div>
-          <span class="score-card-rating rating-avg">Average</span>
+          <span class="score-card-rating rating-avg" id="matchScoreRating">Calculating</span>
         </div>
 
       </div>
@@ -158,13 +221,30 @@
       <!-- Tabs -->
       <div class="tab-nav">
         <button class="tab-btn active" data-tab="tab-overview">Overview</button>
-        <button class="tab-btn" data-tab="tab-skills">Skills</button>
+        <button class="tab-btn" data-tab="tab-skills">Skills &amp; Gaps</button>
         <button class="tab-btn" data-tab="tab-keywords">Keywords</button>
-        <button class="tab-btn" data-tab="tab-suggestions">AI Suggestions</button>
+        <button class="tab-btn" data-tab="tab-suggestions">Suggestions</button>
+        <button class="tab-btn" data-tab="tab-improved-cv"><i class="bi bi-stars" style="color:var(--primary);"></i> Improved CV</button>
       </div>
 
       <!-- ─── TAB: OVERVIEW ─────────────────────── -->
       <div class="tab-panel active" id="tab-overview">
+        <!-- Quick Improved CV Callout -->
+        <div style="background:linear-gradient(135deg, rgba(37,99,235,0.08), rgba(59,130,246,0.08)); border:1px solid rgba(37,99,235,0.25); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">
+              <i class="bi bi-stars"></i>
+            </div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:var(--text-primary);">AI-Enhanced Resume Ready</div>
+              <div style="font-size:12px; color:var(--text-secondary);">Your resume was analyzed and re-drafted incorporating missing skills &amp; target keywords.</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="switchToImprovedCvTab()" type="button" style="display:inline-flex; align-items:center; gap:6px;">
+            <i class="bi bi-eye"></i> View &amp; Download Improved CV
+          </button>
+        </div>
+
         <div class="two-col">
           <!-- Strengths -->
           <div class="card">
@@ -172,26 +252,10 @@
               <h3><i class="bi bi-hand-thumbs-up-fill" style="color:var(--accent-green);margin-right:7px;"></i>Strengths</h3>
             </div>
             <div class="card-body">
-              <ul class="strengths-list">
+              <ul class="strengths-list" id="strengthsList">
                 <li>
                   <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
-                  Good use of action verbs throughout the resume
-                </li>
-                <li>
-                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
-                  Relevant technical skills are clearly mentioned
-                </li>
-                <li>
-                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
-                  Clear and well-structured work experience section
-                </li>
-                <li>
-                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
-                  Well-organized sections with proper headings
-                </li>
-                <li>
-                  <div class="list-icon green"><i class="bi bi-check-lg"></i></div>
-                  Contact information is complete and professional
+                  Analyzing strengths from your resume...
                 </li>
               </ul>
             </div>
@@ -203,26 +267,10 @@
               <h3><i class="bi bi-arrow-up-circle-fill" style="color:var(--accent-orange);margin-right:7px;"></i>Areas to Improve</h3>
             </div>
             <div class="card-body">
-              <ul class="improve-list">
+              <ul class="improve-list" id="improveList">
                 <li>
                   <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
-                  Add more quantifiable achievements with metrics and numbers
-                </li>
-                <li>
-                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
-                  Improve and expand the professional summary section
-                </li>
-                <li>
-                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
-                  Include more industry-relevant keywords for ATS score
-                </li>
-                <li>
-                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
-                  Check grammar in a few areas of the resume
-                </li>
-                <li>
-                  <div class="list-icon orange"><i class="bi bi-exclamation"></i></div>
-                  Consider adding certifications if any are relevant
+                  Analyzing improvement opportunities...
                 </li>
               </ul>
             </div>
@@ -236,30 +284,21 @@
           <!-- Top Skills Found -->
           <div class="card">
             <div class="card-header">
-              <h3>Top Skills Found</h3>
+              <h3>Target Job Skills Comparison</h3>
             </div>
             <div class="card-body">
-              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
-                <span class="skill-tag matched">Python</span>
-                <span class="skill-tag matched">JavaScript</span>
-                <span class="skill-tag matched">SQL</span>
-                <span class="skill-tag matched">React</span>
-                <span class="skill-tag matched">Git</span>
-                <span class="skill-tag default">Docker</span>
-                <span class="skill-tag default">REST API</span>
-                <span class="skill-tag default">Linux</span>
+              <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--accent-green);">
+                <i class="bi bi-check-circle-fill"></i> Matched Skills Found in Resume
+              </div>
+              <div id="matchedSkillsList" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+                <span class="skill-tag matched">Analyzing...</span>
               </div>
 
-              <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">
-                Missing / Recommended Skills
+              <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--accent-red);">
+                <i class="bi bi-x-circle-fill"></i> Missing / Recommended Skills
               </div>
-              <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="skill-tag missing">AWS</span>
-                <span class="skill-tag missing">System Design</span>
-                <span class="skill-tag missing">CI/CD</span>
-                <span class="skill-tag partial">Kubernetes</span>
-                <span class="skill-tag missing">GraphQL</span>
-                <span class="skill-tag missing">Ansible</span>
+              <div id="missingSkillsList" style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="skill-tag missing">Analyzing...</span>
               </div>
             </div>
           </div>
@@ -267,45 +306,36 @@
           <!-- Skills Analysis -->
           <div class="card">
             <div class="card-header">
-              <h3>Skills Analysis</h3>
+              <h3>Skills &amp; Match Distribution</h3>
             </div>
             <div class="card-body">
               <div class="skill-bar-item">
                 <div class="skill-bar-label">
-                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-green);display:inline-block;margin-right:6px;"></span>Matched Skills</span>
-                  <span style="font-weight:700;color:var(--accent-green);">65%</span>
+                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-green);display:inline-block;margin-right:6px;"></span>Matched Job Skills</span>
+                  <span style="font-weight:700;color:var(--accent-green);" id="matchedSkillsPctText">--%</span>
                 </div>
                 <div class="skill-bar-track">
-                  <div class="skill-bar-fill" style="width:65%;background:linear-gradient(90deg,var(--accent-green),#34D399);"></div>
+                  <div class="skill-bar-fill" id="matchedSkillsBar" style="width:0%;background:linear-gradient(90deg,var(--accent-green),#34D399);"></div>
                 </div>
               </div>
               <div class="skill-bar-item">
                 <div class="skill-bar-label">
-                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-red);display:inline-block;margin-right:6px;"></span>Missing Skills</span>
-                  <span style="font-weight:700;color:var(--accent-red);">22%</span>
+                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-red);display:inline-block;margin-right:6px;"></span>Missing Key Skills</span>
+                  <span style="font-weight:700;color:var(--accent-red);" id="missingSkillsPctText">--%</span>
                 </div>
                 <div class="skill-bar-track">
-                  <div class="skill-bar-fill" style="width:22%;background:linear-gradient(90deg,var(--accent-red),#F87171);"></div>
-                </div>
-              </div>
-              <div class="skill-bar-item">
-                <div class="skill-bar-label">
-                  <span><span style="width:10px;height:10px;border-radius:50%;background:var(--accent-orange);display:inline-block;margin-right:6px;"></span>Partial Match</span>
-                  <span style="font-weight:700;color:var(--accent-orange);">13%</span>
-                </div>
-                <div class="skill-bar-track">
-                  <div class="skill-bar-fill" style="width:13%;background:linear-gradient(90deg,var(--accent-orange),#FCD34D);"></div>
+                  <div class="skill-bar-fill" id="missingSkillsBar" style="width:0%;background:linear-gradient(90deg,var(--accent-red),#F87171);"></div>
                 </div>
               </div>
 
               <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border-light);">
-                <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Keyword Match</div>
+                <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Role Compatibility</div>
                 <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:6px;">
-                  <span>Good match with job description</span>
-                  <span style="color:var(--accent-green);">78%</span>
+                  <span>Algorithm Match Rate</span>
+                  <span style="color:var(--accent-green);" id="kwMatchText">--%</span>
                 </div>
                 <div class="kw-match-bar">
-                  <div class="kw-match-fill" style="width:78%;"></div>
+                  <div class="kw-match-fill" id="kwMatchBar" style="width:0%;"></div>
                 </div>
               </div>
             </div>
@@ -318,46 +348,28 @@
         <div class="two-col">
           <div class="card">
             <div class="card-header">
-              <h3>Found Keywords</h3>
-              <span class="badge badge-success">32 found</span>
+              <h3>Matched Keywords</h3>
+              <span class="badge badge-success" id="keywordsFoundCount">0 found</span>
             </div>
             <div class="card-body">
-              <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="skill-tag matched">Software Engineer</span>
-                <span class="skill-tag matched">Python</span>
-                <span class="skill-tag matched">JavaScript</span>
-                <span class="skill-tag matched">React</span>
-                <span class="skill-tag matched">Node.js</span>
-                <span class="skill-tag matched">REST API</span>
-                <span class="skill-tag matched">SQL</span>
-                <span class="skill-tag matched">Git</span>
-                <span class="skill-tag matched">Agile</span>
-                <span class="skill-tag matched">Team Leadership</span>
-                <span class="skill-tag matched">Problem Solving</span>
-                <span class="skill-tag matched">Communication</span>
+              <div id="keywordsFoundList" style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="skill-tag matched">Loading...</span>
               </div>
             </div>
           </div>
 
           <div class="card">
             <div class="card-header">
-              <h3>Missing Keywords</h3>
-              <span class="badge badge-danger">8 missing</span>
+              <h3>Missing Target Keywords</h3>
+              <span class="badge badge-danger" id="keywordsMissingCount">0 missing</span>
             </div>
             <div class="card-body">
-              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
-                <span class="skill-tag missing">AWS</span>
-                <span class="skill-tag missing">DevOps</span>
-                <span class="skill-tag missing">Microservices</span>
-                <span class="skill-tag missing">CI/CD</span>
-                <span class="skill-tag missing">System Design</span>
-                <span class="skill-tag missing">Kubernetes</span>
-                <span class="skill-tag missing">GraphQL</span>
-                <span class="skill-tag missing">Cloud</span>
+              <div id="keywordsMissingList" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+                <span class="skill-tag missing">Loading...</span>
               </div>
-              <div style="font-size:12px;color:var(--text-secondary);background:var(--primary-bg);padding:12px;border-radius:var(--radius-md);border:1px solid #DDD6FE;">
+              <div style="font-size:12px;color:var(--text-secondary);background:var(--primary-bg);padding:12px;border-radius:var(--radius-md);border:1px solid var(--primary-border);">
                 <i class="bi bi-info-circle-fill" style="color:var(--primary);margin-right:5px;"></i>
-                Add these keywords naturally to your resume to improve your ATS score.
+                Incorporate these keywords naturally in your projects and work experience to pass ATS filters.
               </div>
             </div>
           </div>
@@ -369,57 +381,44 @@
         <div class="ai-suggestion-card">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
             <div style="width:36px;height:36px;background:var(--primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:white;font-size:16px;">
-              <i class="bi bi-stars"></i>
+              <i class="bi bi-lightbulb"></i>
             </div>
             <div>
-              <div style="font-weight:700;font-size:14px;">AI Powered Suggestions</div>
-              <div style="font-size:12px;color:var(--text-secondary);">Personalized suggestions to improve your resume</div>
+              <div style="font-weight:700;font-size:14px;">Actionable Resume Recommendations</div>
+              <div style="font-size:12px;color:var(--text-secondary);">Rule-based &amp; market aligned enhancements for your resume</div>
             </div>
           </div>
 
-          <div class="suggestion-item">
-            <div class="suggestion-item-icon"><i class="bi bi-graph-up-arrow"></i></div>
-            <div class="suggestion-item-text">
-              <h4>Add Quantifiable Achievements</h4>
-              <p>Include numbers and metrics to showcase your impact in past roles. E.g., "Improved performance by 40%"</p>
-            </div>
-            <span class="suggestion-priority priority-high">High Impact</span>
+          <div id="aiSuggestionsList">
+            <!-- Dynamic suggestions injected here -->
           </div>
+        </div>
+      </div>
 
-          <div class="suggestion-item">
-            <div class="suggestion-item-icon"><i class="bi bi-file-text"></i></div>
-            <div class="suggestion-item-text">
-              <h4>Improve Summary Section</h4>
-              <p>Make your summary more concise and engaging to grab attention. Lead with your strongest value proposition.</p>
+      <!-- ─── TAB: IMPROVED CV ──────────────────── -->
+      <div class="tab-panel" id="tab-improved-cv">
+        <div class="card">
+          <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <div>
+              <h3><i class="bi bi-stars" style="color:var(--primary);margin-right:7px;"></i>AI-Generated Improved Resume</h3>
+              <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0 0;">
+                Enhanced version of your resume incorporating missing keywords and active impact verbs.
+              </p>
             </div>
-            <span class="suggestion-priority priority-high">High Impact</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-outline btn-sm" id="copyImprovedCvBtn" type="button">
+                <i class="bi bi-clipboard"></i> Copy to Clipboard
+              </button>
+              <button class="btn btn-outline btn-sm" id="downloadImprovedCvDocxBtn" type="button">
+                <i class="bi bi-file-earmark-word-fill" style="color:#2563EB;"></i> Download Word (.docx)
+              </button>
+              <button class="btn btn-primary btn-sm" id="downloadImprovedCvBtn" type="button">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF
+              </button>
+            </div>
           </div>
-
-          <div class="suggestion-item">
-            <div class="suggestion-item-icon"><i class="bi bi-key"></i></div>
-            <div class="suggestion-item-text">
-              <h4>Add More Relevant Keywords</h4>
-              <p>Include industry-relevant keywords like AWS, Kubernetes, and System Design to improve ATS score.</p>
-            </div>
-            <span class="suggestion-priority priority-medium">Medium Impact</span>
-          </div>
-
-          <div class="suggestion-item">
-            <div class="suggestion-item-icon"><i class="bi bi-award"></i></div>
-            <div class="suggestion-item-text">
-              <h4>Consider Adding Certifications</h4>
-              <p>Certifications like AWS Solutions Architect or Google Cloud can significantly increase your credibility.</p>
-            </div>
-            <span class="suggestion-priority priority-low">Low Impact</span>
-          </div>
-
-          <div class="suggestion-item">
-            <div class="suggestion-item-icon"><i class="bi bi-spellcheck"></i></div>
-            <div class="suggestion-item-text">
-              <h4>Grammar &amp; Language Check</h4>
-              <p>A few minor grammar issues were detected. Review your experience section for tense consistency.</p>
-            </div>
-            <span class="suggestion-priority priority-medium">Medium Impact</span>
+          <div class="card-body">
+            <pre id="improvedCvContent" style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.6;background:var(--bg-light);padding:20px;border-radius:var(--radius-md);border:1px solid var(--border-light);max-height:600px;overflow-y:auto;color:var(--text-primary);">Loading improved resume draft...</pre>
           </div>
         </div>
       </div>
@@ -429,6 +428,6 @@
 </div>
 
 <script src="js/main.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/analysis.js"></script>
 </body>
 </html>

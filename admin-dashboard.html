@@ -50,32 +50,25 @@
       <div class="nav-section-label">Administration</div>
 
       <div class="nav-item">
-        <a href="admin-dashboard.html" class="nav-link active">
+        <a href="#overview" class="nav-link admin-nav-item active" data-tab="adminSectionOverview">
           <i class="bi bi-speedometer"></i> Admin Dashboard
         </a>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link" onclick="showToast('Users management coming after backend integration.','info');return false;">
+        <a href="#users" class="nav-link admin-nav-item" data-tab="adminSectionUsers">
           <i class="bi bi-people"></i> Users
-          <span class="badge badge-purple" style="margin-left:auto;font-size:10px;">156</span>
+          <span class="badge badge-purple" id="sidebarBadgeUsers" style="margin-left:auto;font-size:10px;">0</span>
         </a>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link" onclick="showToast('Resumes list coming after backend integration.','info');return false;">
-          <i class="bi bi-file-earmark-text"></i> Resumes
-          <span class="badge badge-info" style="margin-left:auto;font-size:10px;">312</span>
+        <a href="#resumes" class="nav-link admin-nav-item" data-tab="adminSectionResumes">
+          <i class="bi bi-file-earmark-text"></i> Resumes &amp; Analyses
+          <span class="badge badge-info" id="sidebarBadgeResumes" style="margin-left:auto;font-size:10px;">0</span>
         </a>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link" onclick="showToast('Reports section coming after backend integration.','info');return false;">
-          <i class="bi bi-bar-chart-line"></i> Reports
-        </a>
-      </div>
-
-      <div class="nav-section-label" style="margin-top:10px;">System</div>
-      <div class="nav-item">
-        <a href="#" class="nav-link" onclick="showToast('Settings coming after backend integration.','info');return false;">
-          <i class="bi bi-gear"></i> Settings
+        <a href="#" class="nav-link btn-export-csv">
+          <i class="bi bi-file-earmark-spreadsheet"></i> Export CSV
         </a>
       </div>
     </nav>
@@ -98,18 +91,16 @@
         <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
         <div class="header-search">
           <i class="bi bi-search search-icon"></i>
-          <input type="text" placeholder="Search users, resumes..." />
+          <input type="text" id="adminSearchInput" placeholder="Search users, resumes, roles..." />
         </div>
       </div>
       <div class="header-right">
-        <button class="header-icon-btn" onclick="showToast('3 new user registrations today.','info')">
-          <i class="bi bi-bell"></i>
-          <span class="notif-badge"></span>
+        <button class="btn btn-outline btn-sm btn-export-csv" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;">
+          <i class="bi bi-download"></i> Export CSV
         </button>
         <div class="user-profile-btn">
-          <div class="avatar-placeholder admin">AD</div>
-          <span class="user-name">Admin User</span>
-          <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+          <div class="avatar-placeholder admin" id="adminHeaderAvatar">AD</div>
+          <span class="user-name" id="adminHeaderName">Admin User</span>
         </div>
       </div>
     </header>
@@ -117,139 +108,202 @@
     <!-- Page Content -->
     <main class="page-content">
 
-      <!-- Page Header -->
-      <div class="section-header">
-        <h2><i class="bi bi-speedometer" style="color:#4338CA;margin-right:8px;"></i>Admin Dashboard</h2>
-        <p>Manage users, resumes and system analytics</p>
-      </div>
-
-      <!-- Admin Stats Cards -->
-      <div class="stats-grid">
-
-        <div class="stat-card">
-          <div class="stat-card-icon" style="background:#EEF2FF;color:#4338CA;margin-bottom:10px;width:42px;height:42px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:20px;">
-            <i class="bi bi-people-fill"></i>
-          </div>
-          <div class="stat-card-label">Total Users</div>
-          <div class="stat-card-value">156</div>
-          <div class="stat-card-meta"><span class="up">↑ 12</span> this month</div>
+      <!-- ═══════════ SECTION 1: OVERVIEW ═══════════════════ -->
+      <div id="adminSectionOverview">
+        <!-- Page Header -->
+        <div class="section-header">
+          <h2><i class="bi bi-speedometer" style="color:#4338CA;margin-right:8px;"></i>Admin Dashboard Overview</h2>
+          <p>Real-time system analytics, registered users, and resume submissions</p>
         </div>
 
-        <div class="stat-card">
-          <div class="stat-card-icon icon-blue">
-            <i class="bi bi-file-earmark-text"></i>
+        <!-- Admin Stats Cards -->
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-card-icon" style="background:#EEF2FF;color:#4338CA;margin-bottom:10px;width:42px;height:42px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:20px;">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-card-label">Total Users</div>
+            <div class="stat-card-value" id="adminTotalUsers">--</div>
+            <div class="stat-card-meta"><span class="up">Live from Supabase</span></div>
           </div>
-          <div class="stat-card-label">Total Resumes</div>
-          <div class="stat-card-value">312</div>
-          <div class="stat-card-meta"><span class="up">↑ 34</span> this month</div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon icon-blue">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <div class="stat-card-label">Total Resumes</div>
+            <div class="stat-card-value" id="adminTotalResumes">--</div>
+            <div class="stat-card-meta"><span class="up">Uploaded by users</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon icon-purple">
+              <i class="bi bi-graph-up-arrow"></i>
+            </div>
+            <div class="stat-card-label">Total Analyses</div>
+            <div class="stat-card-value" id="adminTotalAnalyses">--</div>
+            <div class="stat-card-meta"><span class="up">Completed analyses</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon icon-green">
+              <i class="bi bi-speedometer2"></i>
+            </div>
+            <div class="stat-card-label">Avg. ATS Score</div>
+            <div class="stat-score-display">
+              <span class="score-num" style="color:var(--accent-green);" id="adminAvgAtsScore">--</span>
+              <span class="score-den">%</span>
+            </div>
+            <div class="stat-card-meta" id="adminAvgAtsRating">Overall Average</div>
+          </div>
+
         </div>
-
-        <div class="stat-card">
-          <div class="stat-card-icon icon-purple">
-            <i class="bi bi-graph-up-arrow"></i>
-          </div>
-          <div class="stat-card-label">Total Analyses</div>
-          <div class="stat-card-value">476</div>
-          <div class="stat-card-meta"><span class="up">↑ 48</span> this month</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-card-icon icon-green">
-            <i class="bi bi-speedometer2"></i>
-          </div>
-          <div class="stat-card-label">Avg. ATS Score</div>
-          <div class="stat-score-display">
-            <span class="score-num" style="color:var(--accent-green);">81</span>
-            <span class="score-den">%</span>
-          </div>
-          <div class="stat-card-meta">Good</div>
-        </div>
-
-      </div>
-
-      <!-- Admin Sections Row -->
-      <div class="two-col" style="align-items:start;">
 
         <!-- Recent Uploads Table -->
-        <div class="card" style="grid-column:1/-1;">
-          <div class="card-header">
-            <h3><i class="bi bi-cloud-upload-fill" style="color:var(--primary);margin-right:7px;"></i>Recent Uploads</h3>
-            <span class="badge badge-purple">Latest 5</span>
+        <div class="two-col" style="align-items:start;margin-top:20px;">
+          <div class="card" style="grid-column:1/-1;">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+              <h3><i class="bi bi-cloud-upload-fill" style="color:var(--primary);margin-right:7px;"></i>Recent Resume Uploads</h3>
+              <button class="btn btn-ghost btn-sm" onclick="switchAdminTab('adminSectionResumes')" style="font-size:12px;">
+                View All <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Candidate</th>
+                    <th>File Name</th>
+                    <th>Upload Date</th>
+                    <th>ATS Score</th>
+                    <th class="action-col">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUploadsTbody">
+                  <!-- Injected by admin.js -->
+                </tbody>
+              </table>
+            </div>
           </div>
+        </div>
+
+        <!-- Quick Admin Actions + Stats -->
+        <div class="two-col" style="margin-top:20px;">
+
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="bi bi-lightning-charge" style="color:var(--accent-orange);margin-right:7px;"></i>Quick Administration</h3>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <button class="btn btn-outline" onclick="switchAdminTab('adminSectionUsers')">
+                  <i class="bi bi-people"></i> Manage Users &amp; Permissions
+                </button>
+                <button class="btn btn-ghost" onclick="switchAdminTab('adminSectionResumes')">
+                  <i class="bi bi-file-earmark-bar-graph"></i> View All Submitted Resumes
+                </button>
+                <button class="btn btn-ghost btn-export-csv">
+                  <i class="bi bi-download"></i> Export System Report (CSV)
+                </button>
+                <a href="admin-login.html" class="btn btn-danger btn-sm logout-link" style="margin-top:6px;">
+                  <i class="bi bi-box-arrow-left"></i> Logout Admin
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Info -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="bi bi-info-circle" style="color:var(--accent-blue);margin-right:7px;"></i>System Status</h3>
+            </div>
+            <div class="card-body" style="padding:16px 20px;">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:13px;font-weight:500;">Backend Engine</span>
+                  <span class="badge badge-success"><i class="bi bi-check-circle-fill"></i> Python Flask (Online)</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:13px;font-weight:500;">AI Engine</span>
+                  <span class="badge badge-purple"><i class="bi bi-stars"></i> Gemini 3.5 Flash</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:13px;font-weight:500;">Database</span>
+                  <span class="badge badge-success"><i class="bi bi-database-check"></i> Supabase PostgreSQL</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:13px;font-weight:500;">Environment</span>
+                  <span class="badge badge-info">Production Ready</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════ SECTION 2: USERS MANAGEMENT ════════════ -->
+      <div id="adminSectionUsers" style="display:none;">
+        <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h2><i class="bi bi-people-fill" style="color:#4338CA;margin-right:8px;"></i>Users Management</h2>
+            <p>View registered users, promote/demote roles, and manage permissions</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="loadAdminUsers()">
+            <i class="bi bi-arrow-clockwise"></i> Refresh Users
+          </button>
+        </div>
+
+        <div class="card">
           <div style="overflow-x:auto;">
             <table class="custom-table">
               <thead>
                 <tr>
-                  <th>User Name</th>
-                  <th>File Name</th>
-                  <th>Upload Date</th>
-                  <th>ATS Score</th>
-                  <th class="action-col">Action</th>
+                  <th>User Details</th>
+                  <th>Email Address</th>
+                  <th>System Role</th>
+                  <th>Registered Date</th>
+                  <th class="action-col" style="text-align:right;">Actions</th>
                 </tr>
               </thead>
-              <tbody id="adminUploadsTbody">
-                <!-- Populated by dashboard.js -->
+              <tbody id="adminUsersTbody">
+                <!-- Injected by admin.js -->
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Quick Admin Actions + Stats -->
-      <div class="two-col" style="margin-top:16px;">
-
-        <!-- Quick Actions -->
-        <div class="card">
-          <div class="card-header">
-            <h3><i class="bi bi-lightning-charge" style="color:var(--accent-orange);margin-right:7px;"></i>Quick Actions</h3>
+      <!-- ═══════════ SECTION 3: RESUMES & ANALYSES ═══════════ -->
+      <div id="adminSectionResumes" style="display:none;">
+        <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h2><i class="bi bi-file-earmark-text-fill" style="color:#4338CA;margin-right:8px;"></i>All Submitted Resumes</h2>
+            <p>Review candidate resumes, target companies, scores, and generate reports</p>
           </div>
-          <div class="card-body">
-            <div style="display:flex;flex-direction:column;gap:10px;">
-              <button class="btn btn-outline" onclick="showToast('User management requires backend integration.','info')">
-                <i class="bi bi-person-plus"></i> Manage Users
-              </button>
-              <button class="btn btn-ghost" onclick="showToast('Resume management requires backend integration.','info')">
-                <i class="bi bi-file-earmark-bar-graph"></i> View All Resumes
-              </button>
-              <button class="btn btn-ghost" onclick="showToast('Report export requires backend integration.','info')">
-                <i class="bi bi-download"></i> Export Report
-              </button>
-              <a href="admin-login.html" class="btn btn-danger btn-sm">
-                <i class="bi bi-box-arrow-left"></i> Logout Admin
-              </a>
-            </div>
-          </div>
+          <button class="btn btn-outline btn-sm btn-export-csv">
+            <i class="bi bi-download"></i> Download All as CSV
+          </button>
         </div>
 
-        <!-- System Info -->
         <div class="card">
-          <div class="card-header">
-            <h3><i class="bi bi-info-circle" style="color:var(--accent-blue);margin-right:7px;"></i>System Overview</h3>
-          </div>
-          <div class="card-body" style="padding:16px 20px;">
-            <div style="display:flex;flex-direction:column;gap:12px;">
-
-              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border-light);">
-                <span style="font-size:13px;font-weight:500;">Active Users (Today)</span>
-                <span class="badge badge-success">24</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border-light);">
-                <span style="font-size:13px;font-weight:500;">Analyses This Week</span>
-                <span class="badge badge-purple">89</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border-light);">
-                <span style="font-size:13px;font-weight:500;">PDF Uploads</span>
-                <span class="badge badge-danger">214</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border-light);">
-                <span style="font-size:13px;font-weight:500;">DOCX Uploads</span>
-                <span class="badge badge-info">98</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-size:13px;font-weight:500;">System Status</span>
-                <span class="badge badge-success"><i class="bi bi-circle-fill" style="font-size:7px;margin-right:4px;"></i>Online</span>
-              </div>
-            </div>
+          <div style="overflow-x:auto;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Candidate</th>
+                  <th>Resume File</th>
+                  <th>Target Role &amp; Company</th>
+                  <th>Scores</th>
+                  <th>Analyzed Date</th>
+                  <th class="action-col" style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminAllResumesTbody">
+                <!-- Injected by admin.js -->
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -259,6 +313,6 @@
 </div>
 
 <script src="js/main.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/admin.js"></script>
 </body>
 </html>

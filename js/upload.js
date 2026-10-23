@@ -156,16 +156,86 @@ function initUpload() {
     if (files.length > 0) handleFile(files[0]);
   });
 
+var API_BASE_URL = window.API_BASE_URL ||
+  (window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000/api' : 'http://localhost:5000/api');
+
   // Analyze button
-  analyzeBtn && analyzeBtn.addEventListener('click', () => {
+  analyzeBtn && analyzeBtn.addEventListener('click', async () => {
     if (!selectedFile) return;
+
+    const targetJobInput = document.getElementById('targetJobInput');
+    const jobTitle = targetJobInput ? targetJobInput.value.trim() : 'Software Engineer';
+
+    const targetCompanyInput = document.getElementById('targetCompanyInput');
+    const companyName = targetCompanyInput ? targetCompanyInput.value.trim() : '';
+
+    const targetJobDescInput = document.getElementById('targetJobDescriptionInput');
+    const jobDescription = targetJobDescInput ? targetJobDescInput.value.trim() : '';
+
+    let userId = '';
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        userId = parsed.id || '';
+      }
+    } catch (e) {
+      console.warn('Could not read user id from storage', e);
+    }
+
+    const originalBtnHtml = analyzeBtn.innerHTML;
     analyzeBtn.disabled = true;
-    analyzeBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Analyzing...';
-    simulateUploadProgress(() => {
-      showToast('Analysis complete! Redirecting to results...', 'success');
-      setTimeout(() => { window.location.href = 'analysis.html'; }, 1000);
-    });
+    analyzeBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Extracting & Analyzing...';
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('job_title', jobTitle || 'Software Engineer');
+    if (companyName) formData.append('company_name', companyName);
+    if (jobDescription) formData.append('job_description', jobDescription);
+    if (userId) formData.append('user_id', userId);
+
+    const progressWrapper = document.getElementById('uploadProgressWrapper');
+    const progressBar = document.getElementById('uploadProgressBar');
+    if (progressWrapper && progressBar) {
+      progressWrapper.style.display = 'block';
+      progressBar.style.width = '45%';
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/resume/analyze`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (progressBar) progressBar.style.width = '85%';
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (progressBar) progressBar.style.width = '100%';
+        localStorage.setItem('latest_analysis', JSON.stringify(data));
+        showToast('Analysis completed successfully!', 'success');
+        setTimeout(() => {
+          window.location.href = `analysis.html?id=${data.analysis_id || ''}`;
+        }, 800);
+      } else {
+        showToast(data.error || 'Failed to analyze resume.', 'error');
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = originalBtnHtml;
+        if (progressWrapper) progressWrapper.style.display = 'none';
+      }
+    } catch (err) {
+      console.error('Upload Error:', err);
+      showToast('Network error: Is the backend server running?', 'error');
+      analyzeBtn.disabled = false;
+      analyzeBtn.innerHTML = originalBtnHtml;
+      if (progressWrapper) progressWrapper.style.display = 'none';
+    }
   });
 }
 
-document.addEventListener('DOMContentLoaded', initUpload);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initUpload);
+} else {
+  initUpload();
+}

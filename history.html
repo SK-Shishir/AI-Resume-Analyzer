@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume History — AI Resume Analyzer</title>
-  <meta name="description" content="View all your previous resume analyses, scores, and reports in one place." />
+  <title>My Reports — AI Resume Analyzer</title>
+  <meta name="description" content="View and manage all your previous resume analyses, scores, and reports in one place." />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -33,8 +33,26 @@
       <div class="nav-item"><a href="history.html" class="nav-link active"><i class="bi bi-file-earmark-bar-graph"></i> My Reports</a></div>
       <div class="nav-item"><a href="history.html" class="nav-link"><i class="bi bi-clock-history"></i> Resume History</a></div>
       <div class="nav-section-label" style="margin-top:10px;">Account</div>
-      <div class="nav-item"><a href="#" class="nav-link" onclick="showToast('Profile coming soon.','info');return false;"><i class="bi bi-person-circle"></i> Profile</a></div>
-      <div class="nav-item"><a href="#" class="nav-link" onclick="showToast('Settings coming soon.','info');return false;"><i class="bi bi-gear"></i> Settings</a></div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-account-settings">
+          <i class="bi bi-person-gear"></i> Account Settings
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-help-center">
+          <i class="bi bi-question-circle"></i> Help Center
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-contact-us">
+          <i class="bi bi-chat-dots"></i> Contact Us
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-language">
+          <i class="bi bi-globe"></i> Language
+        </a>
+      </div>
     </nav>
     <div class="sidebar-footer">
       <div class="nav-item"><a href="login.html" class="nav-link logout-link"><i class="bi bi-box-arrow-left"></i> Logout</a></div>
@@ -58,10 +76,49 @@
           <i class="bi bi-bell"></i>
           <span class="notif-badge"></span>
         </button>
-        <div class="user-profile-btn">
-          <div class="avatar-placeholder">SK</div>
-          <span class="user-name">Shishir Chandro</span>
-          <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+        <div class="user-profile-wrapper">
+          <div class="user-profile-btn" id="profileDropdownBtn">
+            <div class="avatar-placeholder" id="userAvatar">U</div>
+            <span class="user-name" id="userNameHeader">User</span>
+            <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+          </div>
+
+          <!-- Profile Dropdown Menu -->
+          <div class="profile-dropdown-menu" id="profileDropdownMenu">
+            <div class="dropdown-user-info">
+              <div class="dropdown-user-name" id="dropdownUserName">User</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">user@example.com</div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnAccountSettings">
+              <i class="bi bi-person-gear"></i>
+              <span>Account settings</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnHelpCenter">
+              <i class="bi bi-question-circle"></i>
+              <span>Help center</span>
+            </a>
+            <a href="#" class="dropdown-item" id="btnContactUs">
+              <i class="bi bi-chat-dots"></i>
+              <span>Contact us</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item dropdown-item-between" id="btnLanguage">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-globe"></i>
+                <span>Language</span>
+              </div>
+              <div class="dropdown-lang-badge">
+                <span id="currentLangLabel">English</span>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item text-danger logout-link" id="dropdownLogoutBtn">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Log out</span>
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -72,8 +129,8 @@
       <!-- Section Header -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
         <div class="section-header" style="margin-bottom:0;">
-          <h2><i class="bi bi-clock-history" style="color:var(--primary);margin-right:8px;"></i>Resume History</h2>
-          <p>View all your previous resume analyses and their analysis history</p>
+          <h2><i class="bi bi-file-earmark-bar-graph" style="color:var(--primary);margin-right:8px;"></i>My Reports</h2>
+          <p>View, manage, and track all your previous resume analyses and reports</p>
         </div>
         <a href="upload.html" class="btn btn-primary">
           <i class="bi bi-plus-lg"></i> New Analysis
@@ -88,7 +145,7 @@
           </div>
           <div>
             <div class="stat-card-label">Total Resumes</div>
-            <div class="stat-card-value" style="font-size:22px;">5</div>
+            <div class="stat-card-value" style="font-size:22px;" id="historyTotalResumes">0</div>
           </div>
         </div>
         <div class="stat-card" style="flex-direction:row;align-items:center;gap:14px;padding:16px 20px;">
@@ -97,7 +154,7 @@
           </div>
           <div>
             <div class="stat-card-label">Best Score</div>
-            <div class="stat-card-value" style="font-size:22px;color:var(--accent-green);">89/100</div>
+            <div class="stat-card-value" style="font-size:22px;color:var(--accent-green);" id="historyBestScore">0/100</div>
           </div>
         </div>
         <div class="stat-card" style="flex-direction:row;align-items:center;gap:14px;padding:16px 20px;">
@@ -106,7 +163,7 @@
           </div>
           <div>
             <div class="stat-card-label">Avg ATS Score</div>
-            <div class="stat-card-value" style="font-size:22px;color:var(--accent-orange);">77%</div>
+            <div class="stat-card-value" style="font-size:22px;color:var(--accent-orange);" id="historyAvgAts">0%</div>
           </div>
         </div>
       </div>
@@ -117,15 +174,14 @@
           <i class="bi bi-search search-icon"></i>
           <input type="text" id="historySearch" placeholder="Search by resume name..." />
         </div>
-        <select class="filter-select">
-          <option>All Statuses</option>
-          <option>Completed</option>
-          <option>Processing</option>
+        <select class="filter-select" id="historyStatusFilter">
+          <option value="all">All Statuses</option>
+          <option value="completed">Completed</option>
         </select>
-        <select class="filter-select">
-          <option>All Time</option>
-          <option>This Month</option>
-          <option>Last 3 Months</option>
+        <select class="filter-select" id="historyDateFilter">
+          <option value="all">All Time</option>
+          <option value="month">This Month</option>
+          <option value="3months">Last 3 Months</option>
         </select>
       </div>
 
@@ -140,7 +196,7 @@
                 <th>Resume Score</th>
                 <th>ATS Score</th>
                 <th>Status</th>
-                <th class="action-col">Action</th>
+                <th class="action-col" style="text-align:right;">Actions</th>
               </tr>
             </thead>
             <tbody id="historyTbody">
@@ -152,7 +208,7 @@
 
       <!-- Pagination placeholder -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:10px;">
-        <span style="font-size:13px;color:var(--text-muted);">Showing 5 of 5 results</span>
+        <span style="font-size:13px;color:var(--text-muted);" id="historyCountLabel">Showing 0 of 0 results</span>
         <div style="display:flex;gap:6px;">
           <button class="btn btn-ghost btn-sm" disabled><i class="bi bi-chevron-left"></i> Prev</button>
           <button class="btn btn-primary btn-sm">1</button>

@@ -42,11 +42,26 @@
         <a href="history.html" class="nav-link"><i class="bi bi-clock-history"></i> Resume History</a>
       </div>
       <div class="nav-section-label" style="margin-top:10px;">Account</div>
+
       <div class="nav-item">
-        <a href="#" class="nav-link" onclick="showToast('Profile coming after backend integration.','info');return false;"><i class="bi bi-person-circle"></i> Profile</a>
+        <a href="#" class="nav-link" id="nav-account-settings">
+          <i class="bi bi-person-gear"></i> Account Settings
+        </a>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link" onclick="showToast('Settings coming after backend integration.','info');return false;"><i class="bi bi-gear"></i> Settings</a>
+        <a href="#" class="nav-link" id="nav-help-center">
+          <i class="bi bi-question-circle"></i> Help Center
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-contact-us">
+          <i class="bi bi-chat-dots"></i> Contact Us
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-language">
+          <i class="bi bi-globe"></i> Language
+        </a>
       </div>
     </nav>
 
@@ -74,10 +89,49 @@
           <i class="bi bi-bell"></i>
           <span class="notif-badge"></span>
         </button>
-        <div class="user-profile-btn">
-          <div class="avatar-placeholder">SK</div>
-          <span class="user-name">Shishir Chandro</span>
-          <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+        <div class="user-profile-wrapper">
+          <div class="user-profile-btn" id="profileDropdownBtn">
+            <div class="avatar-placeholder" id="userAvatar">U</div>
+            <span class="user-name" id="userNameHeader">User</span>
+            <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+          </div>
+
+          <!-- Profile Dropdown Menu -->
+          <div class="profile-dropdown-menu" id="profileDropdownMenu">
+            <div class="dropdown-user-info">
+              <div class="dropdown-user-name" id="dropdownUserName">User</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">user@example.com</div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnAccountSettings">
+              <i class="bi bi-person-gear"></i>
+              <span>Account settings</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnHelpCenter">
+              <i class="bi bi-question-circle"></i>
+              <span>Help center</span>
+            </a>
+            <a href="#" class="dropdown-item" id="btnContactUs">
+              <i class="bi bi-chat-dots"></i>
+              <span>Contact us</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item dropdown-item-between" id="btnLanguage">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-globe"></i>
+                <span>Language</span>
+              </div>
+              <div class="dropdown-lang-badge">
+                <span id="currentLangLabel">English</span>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item text-danger logout-link" id="dropdownLogoutBtn">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Log out</span>
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -123,6 +177,101 @@
 
           <!-- File preview area -->
           <div id="filePreview" style="display:none;margin-top:14px;"></div>
+
+          <!-- Target Job Role & Target Company Input -->
+          <div class="card" style="margin-top:16px;padding:18px 20px;">
+            <!-- Target Job Role -->
+            <div style="margin-bottom:16px;">
+              <label class="form-label" for="targetJobInput" style="font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                <i class="bi bi-briefcase" style="color:var(--primary);"></i> Target Job Role <span style="color:var(--red);font-size:13px;">*</span>
+              </label>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                Specify the role you are applying for so AI can match industry-standard skills and keywords.
+              </p>
+              <div class="input-wrapper">
+                <i class="bi bi-search input-icon"></i>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="targetJobInput"
+                  placeholder="e.g. Software Engineer, Cyber Security, Management Trainee"
+                  value="Software Engineer"
+                  list="popularJobsList"
+                  required
+                />
+                <datalist id="popularJobsList">
+                  <option value="Software Engineer">
+                  <option value="Frontend Developer">
+                  <option value="Backend Developer">
+                  <option value="Full Stack Developer">
+                  <option value="Cyber Security Analyst">
+                  <option value="Data Analyst">
+                  <option value="Python Developer">
+                  <option value="Management Trainee">
+                  <option value="UI/UX Designer">
+                  <option value="DevOps Engineer">
+                </datalist>
+              </div>
+            </div>
+
+            <!-- Target Company Name (Optional) -->
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                <label class="form-label" for="targetCompanyInput" style="font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:0;">
+                  <i class="bi bi-building" style="color:var(--accent-orange);"></i> Target Company <span class="badge badge-purple" style="font-size:10.5px;font-weight:600;padding:2px 8px;">Optional</span>
+                </label>
+              </div>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                Adding a company (e.g. BRAC Bank, bKash, Google) allows AI to tailor requirements and resume keywords specifically to their hiring culture.
+              </p>
+              <div class="input-wrapper">
+                <i class="bi bi-buildings input-icon"></i>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="targetCompanyInput"
+                  placeholder="e.g. BRAC Bank, bKash, Google, Grameenphone"
+                  list="popularCompaniesList"
+                />
+                <datalist id="popularCompaniesList">
+                  <option value="BRAC Bank">
+                  <option value="bKash">
+                  <option value="Grameenphone">
+                  <option value="Banglalink">
+                  <option value="Robi Axiata">
+                  <option value="Brain Station 23">
+                  <option value="Samsung R&D">
+                  <option value="Pathao">
+                  <option value="Chaldal">
+                  <option value="Google">
+                  <option value="Microsoft">
+                  <option value="Amazon">
+                </datalist>
+              </div>
+            </div>
+
+            <!-- Job Circular / Description (JD) (Optional) -->
+            <div style="margin-top:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                <label class="form-label" for="targetJobDescriptionInput" style="font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:0;">
+                  <i class="bi bi-file-earmark-text" style="color:var(--accent-teal, #0d9488);"></i> Job Circular / Description (JD) 
+                  <span class="badge badge-purple" style="font-size:10.5px;font-weight:600;padding:2px 8px;">Recommended for Match</span>
+                </label>
+              </div>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                Paste the circular from Bdjobs, LinkedIn, or employer's site. Gemini AI will match exact keywords, skills &amp; responsibilities line-by-line.
+              </p>
+              <div class="input-wrapper" style="align-items:flex-start;">
+                <textarea
+                  class="form-control"
+                  id="targetJobDescriptionInput"
+                  rows="4"
+                  placeholder="Paste the job circular/description here (requirements, qualifications, duties)..."
+                  style="font-size:13px;line-height:1.5;resize:vertical;padding-top:10px;"
+                ></textarea>
+              </div>
+            </div>
+          </div>
 
           <!-- Analyze Button -->
           <div style="margin-top:20px;">

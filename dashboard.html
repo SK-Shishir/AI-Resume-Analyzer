@@ -54,13 +54,23 @@
       <div class="nav-section-label" style="margin-top:10px;">Account</div>
 
       <div class="nav-item">
-        <a href="#" class="nav-link" id="nav-profile" onclick="showToast('Profile page coming after backend integration.','info');return false;">
-          <i class="bi bi-person-circle"></i> Profile
+        <a href="#" class="nav-link" id="nav-account-settings">
+          <i class="bi bi-person-gear"></i> Account Settings
         </a>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link" id="nav-settings" onclick="showToast('Settings coming after backend integration.','info');return false;">
-          <i class="bi bi-gear"></i> Settings
+        <a href="#" class="nav-link" id="nav-help-center">
+          <i class="bi bi-question-circle"></i> Help Center
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-contact-us">
+          <i class="bi bi-chat-dots"></i> Contact Us
+        </a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link" id="nav-language">
+          <i class="bi bi-globe"></i> Language
         </a>
       </div>
     </nav>
@@ -90,14 +100,53 @@
       </div>
       <div class="header-right">
         <button class="header-icon-btn" aria-label="Notifications"
-          onclick="showToast('You have 2 new notifications.','info')">
+          onclick="showToast('No new notifications.','info')">
           <i class="bi bi-bell"></i>
           <span class="notif-badge"></span>
         </button>
-        <div class="user-profile-btn" id="profileDropdownBtn">
-          <div class="avatar-placeholder">SK</div>
-          <span class="user-name">Shishir Chandro</span>
-          <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+        <div class="user-profile-wrapper">
+          <div class="user-profile-btn" id="profileDropdownBtn">
+            <div class="avatar-placeholder" id="userAvatar">U</div>
+            <span class="user-name" id="userNameHeader">User</span>
+            <i class="bi bi-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+          </div>
+
+          <!-- Profile Dropdown Menu -->
+          <div class="profile-dropdown-menu" id="profileDropdownMenu">
+            <div class="dropdown-user-info">
+              <div class="dropdown-user-name" id="dropdownUserName">User</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">user@example.com</div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnAccountSettings">
+              <i class="bi bi-person-gear"></i>
+              <span>Account settings</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" id="btnHelpCenter">
+              <i class="bi bi-question-circle"></i>
+              <span>Help center</span>
+            </a>
+            <a href="#" class="dropdown-item" id="btnContactUs">
+              <i class="bi bi-chat-dots"></i>
+              <span>Contact us</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item dropdown-item-between" id="btnLanguage">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-globe"></i>
+                <span>Language</span>
+              </div>
+              <div class="dropdown-lang-badge">
+                <span id="currentLangLabel">English</span>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item text-danger logout-link" id="dropdownLogoutBtn">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Log out</span>
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -108,7 +157,7 @@
       <!-- Welcome Banner -->
       <div class="welcome-banner">
         <div>
-          <div class="welcome-title">Welcome back, SK</div>
+          <div class="welcome-title" id="welcomeUserTitle">Welcome back!</div>
           <div class="welcome-sub">Here's your resume analysis overview. Let's boost your career!</div>
         </div>
         <a href="upload.html" class="btn btn-white" style="z-index:1;position:relative;">
@@ -123,8 +172,8 @@
             <i class="bi bi-file-earmark-text"></i>
           </div>
           <div class="stat-card-label">Total Analyses</div>
-          <div class="stat-card-value">12</div>
-          <div class="stat-card-meta"><span class="up">↑ 3</span> this month</div>
+          <div class="stat-card-value" id="dashTotalAnalyses">0</div>
+          <div class="stat-card-meta">Resumes processed</div>
         </div>
 
         <div class="stat-card">
@@ -133,31 +182,31 @@
           </div>
           <div class="stat-card-label">Average Score</div>
           <div class="stat-score-display">
-            <span class="score-num">78</span>
+            <span class="score-num" id="dashAvgScore">0</span>
             <span class="score-den">/100</span>
           </div>
-          <div class="stat-card-meta">Best Progress</div>
+          <div class="stat-card-meta">Across all resumes</div>
         </div>
 
         <div class="stat-card">
           <div class="stat-card-icon icon-green">
             <i class="bi bi-speedometer2"></i>
           </div>
-          <div class="stat-card-label">ATS Score</div>
+          <div class="stat-card-label">Avg ATS Score</div>
           <div class="stat-score-display">
-            <span class="score-num" style="color:var(--accent-green);">82</span>
+            <span class="score-num" style="color:var(--accent-green);" id="dashAtsScore">0</span>
             <span class="score-den">%</span>
           </div>
-          <div class="stat-card-meta">Above Average</div>
+          <div class="stat-card-meta">ATS Compatibility</div>
         </div>
 
         <div class="stat-card">
           <div class="stat-card-icon icon-blue">
             <i class="bi bi-lightbulb"></i>
           </div>
-          <div class="stat-card-label">Suggestions</div>
-          <div class="stat-card-value">24</div>
-          <div class="stat-card-meta">Total Received</div>
+          <div class="stat-card-label">AI Suggestions</div>
+          <div class="stat-card-value" id="dashTotalSuggestions">0</div>
+          <div class="stat-card-meta">Improvement points</div>
         </div>
       </div>
 

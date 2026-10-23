@@ -50,7 +50,7 @@
         <div class="form-group">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <label class="form-label" for="loginPassword" style="margin:0;">Password</label>
-            <a href="#" class="auth-link" style="font-size:12px;" onclick="showToast('Password reset will be available after backend integration.','info');return false;">
+            <a href="#" class="auth-link" style="font-size:12px;" id="forgotPasswordLink">
               Forgot Password?
             </a>
           </div>
@@ -100,6 +100,97 @@
       </a>
     </div>
 
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.65);z-index:9999;backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;">
+  <div class="card" style="max-width:440px;width:100%;margin:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);border:1px solid var(--border-color);border-radius:16px;background:var(--card-bg, #ffffff);overflow:hidden;">
+    
+    <!-- Modal Header -->
+    <div style="padding:18px 22px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(124,58,237,0.12);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;">
+          <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <div>
+          <h3 style="font-size:16px;font-weight:700;margin:0;">Reset Password</h3>
+          <p style="font-size:12px;color:var(--text-muted);margin:0;">Verify email &amp; create new password</p>
+        </div>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm" id="closeForgotModalBtn" style="padding:4px 8px;border-radius:8px;">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div style="padding:22px;">
+      
+      <!-- Step 1: Request OTP -->
+      <div id="forgotStep1">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.5;">
+          Enter your registered email address. We will verify your account and provide a 6-digit verification code.
+        </p>
+
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label" for="resetEmailInput" style="font-weight:600;font-size:13px;">Registered Email Address</label>
+          <div class="input-wrapper">
+            <i class="bi bi-envelope input-icon"></i>
+            <input type="email" class="form-control" id="resetEmailInput" placeholder="name@example.com" required />
+          </div>
+          <div class="invalid-feedback" id="resetEmailError" style="display:none;color:var(--red);font-size:12px;margin-top:4px;"></div>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-full" id="sendOtpBtn">
+          <i class="bi bi-send-fill"></i> Send Verification Code
+        </button>
+      </div>
+
+      <!-- Step 2: Enter OTP & New Password -->
+      <div id="forgotStep2" style="display:none;">
+        <div class="alert alert-info" id="otpNoticeBox" style="font-size:12.5px;padding:10px 14px;border-radius:8px;margin-bottom:16px;background:rgba(14,165,233,0.1);color:#0284C7;border:1px solid rgba(14,165,233,0.25);">
+          <i class="bi bi-info-circle-fill" style="margin-right:6px;"></i> <span id="otpNoticeText">Verification code generated!</span>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label" for="resetOtpInput" style="font-weight:600;font-size:13px;">6-Digit Verification Code</label>
+          <div class="input-wrapper">
+            <i class="bi bi-key input-icon"></i>
+            <input type="text" class="form-control" id="resetOtpInput" placeholder="123456" maxlength="6" style="letter-spacing:4px;font-weight:700;font-size:16px;text-align:center;" required />
+          </div>
+          <div class="invalid-feedback" id="resetOtpError" style="display:none;color:var(--red);font-size:12px;margin-top:4px;"></div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label" for="resetNewPassInput" style="font-weight:600;font-size:13px;">New Password</label>
+          <div class="input-wrapper">
+            <i class="bi bi-lock input-icon"></i>
+            <input type="password" class="form-control" id="resetNewPassInput" placeholder="At least 6 characters" required />
+            <i class="bi bi-eye-slash input-toggle" id="resetNewPassToggle"></i>
+          </div>
+          <div class="invalid-feedback" id="resetNewPassError" style="display:none;color:var(--red);font-size:12px;margin-top:4px;"></div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:18px;">
+          <label class="form-label" for="resetConfirmPassInput" style="font-weight:600;font-size:13px;">Confirm New Password</label>
+          <div class="input-wrapper">
+            <i class="bi bi-lock-fill input-icon"></i>
+            <input type="password" class="form-control" id="resetConfirmPassInput" placeholder="Repeat new password" required />
+          </div>
+          <div class="invalid-feedback" id="resetConfirmPassError" style="display:none;color:var(--red);font-size:12px;margin-top:4px;"></div>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button type="button" class="btn btn-outline" id="backToStep1Btn" style="flex:1;">
+            <i class="bi bi-arrow-left"></i> Back
+          </button>
+          <button type="button" class="btn btn-primary" id="confirmResetBtn" style="flex:2;">
+            <i class="bi bi-check2-circle"></i> Update Password
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
