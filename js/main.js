@@ -4,7 +4,8 @@
    and Account Modals (Settings, Help, Contact, Language)
    ===================================================== */
 
-const MAIN_API_BASE = 'http://localhost:5000/api';
+var MAIN_API_BASE = window.API_BASE_URL || (window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000/api' : 'http://localhost:5000/api');
+
 
 // ── SIDEBAR TOGGLE (mobile) ──────────────────────────
 function initSidebar() {
