@@ -4,7 +4,7 @@
 
 // REPLACE THIS with your live Render backend URL once deployed:
 // Example: 'https://ai-resume-analyzer-backend.onrender.com/api'
-const LIVE_BACKEND_URL = 'https://ai-resume-analyzer-backend.onrender.com/api';
+const LIVE_BACKEND_URL = 'https://ai-resume-analyzer-backend-obxb.onrender.com/api';
 
 // Detect whether running locally or on live hosting (e.g. Vercel)
 const isLocal = Boolean(
