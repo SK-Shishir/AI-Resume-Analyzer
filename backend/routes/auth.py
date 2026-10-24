@@ -29,12 +29,19 @@ def validate_email_endpoint():
             
         # Check if already registered
         if supabase:
-            existing = supabase.table('users').select('id').eq('email', msg).execute()
-            if existing.data:
-                return jsonify({"valid": False, "error": "This email is already registered. Please sign in."}), 409
+            try:
+                existing = supabase.table('users').select('id').eq('email', msg).execute()
+                if existing.data:
+                    return jsonify({"valid": False, "error": "This email is already registered. Please sign in."}), 409
+            except Exception as db_err:
+                print(f"[Supabase Check Error]: {db_err}")
+                if "Name or service not known" in str(db_err) or "gaierror" in str(db_err) or "ConnectError" in str(db_err):
+                    return jsonify({"valid": False, "error": "Database connection failed. Please verify SUPABASE_URL in Render environment variables."}), 500
+                return jsonify({"valid": False, "error": "Database error while verifying email."}), 500
                 
         return jsonify({"valid": True, "message": "Email is valid and ready for registration.", "normalized": msg}), 200
     except Exception as e:
+        print(f"[validate_email Error]: {e}")
         return jsonify({"valid": False, "error": str(e)}), 500
 
 @auth_bp.route('/register/send-otp', methods=['POST'])
