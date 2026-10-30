@@ -1083,6 +1083,8 @@ h1, h2, h3, h4, h5, h6 {
   top: -240px;
   left: 50%;
   transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
 }
 .hero-badge {
   display: inline-flex;
@@ -1105,7 +1107,19 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 .hero-desc { font-size: 17px; color: var(--text-sub); max-width: 580px; margin: 0 auto 34px; line-height: 1.7; }
-.hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 5;
+}
+.hero-buttons .btn {
+  position: relative;
+  z-index: 6;
+  cursor: pointer;
+}
 .features-section { padding: 80px 48px; background: var(--bg-white); }
 .features-section h2 { text-align: center; font-size: 34px; margin-bottom: 10px; color: var(--text); }
 .features-section .section-desc { text-align: center; color: var(--text-sub); font-size: 15px; margin-bottom: 50px; }

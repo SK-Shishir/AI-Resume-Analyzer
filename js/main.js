@@ -706,6 +706,43 @@ function initProfileDropdown() {
   attachAction('#dropdownLogoutBtn, .logout-link', () => logout());
 }
 
+// ── HOME PAGE HERO BUTTONS & AUTH STATE ─────────────
+function initHomePageCTA() {
+  const heroPrimary = document.getElementById('heroCTAPrimary');
+  const heroSecondary = document.getElementById('heroCTASecondary');
+  const ctaGetStarted = document.getElementById('ctaGetStarted');
+  
+  if (heroPrimary) {
+    heroPrimary.href = 'upload.html';
+  }
+
+  let user = null;
+  try {
+    const userStr = localStorage.getItem('user');
+    if (userStr) user = JSON.parse(userStr);
+  } catch {}
+
+  if (user && user.id) {
+    if (heroSecondary) {
+      heroSecondary.href = 'dashboard.html';
+      heroSecondary.innerHTML = '<i class="bi bi-speedometer2"></i> Go to Dashboard';
+    }
+    if (ctaGetStarted) {
+      ctaGetStarted.href = 'dashboard.html';
+      ctaGetStarted.innerHTML = '<i class="bi bi-speedometer2"></i> Go to Dashboard';
+    }
+    const navAuthContainer = document.querySelector('.home-nav div[style*="display:flex"]');
+    if (navAuthContainer) {
+      const toggleBtn = navAuthContainer.querySelector('.mobile-nav-toggle');
+      navAuthContainer.innerHTML = `
+        <a href="dashboard.html" class="btn btn-ghost btn-sm"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="upload.html" class="btn btn-primary btn-sm"><i class="bi bi-cloud-arrow-up"></i> Upload Resume</a>
+      `;
+      if (toggleBtn) navAuthContainer.appendChild(toggleBtn);
+    }
+  }
+}
+
 // ── INIT ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
@@ -714,6 +751,7 @@ document.addEventListener('DOMContentLoaded', () => {
   injectGlobalModals();
   populateGlobalUserInfo();
   initProfileDropdown();
+  initHomePageCTA();
 
   // Apply saved language if any
   const savedLang = localStorage.getItem('app_language');
