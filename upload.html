@@ -194,8 +194,6 @@
                   type="text"
                   class="form-control"
                   id="targetJobInput"
-                  placeholder="e.g. Software Engineer, Cyber Security, Management Trainee"
-                  value="Software Engineer"
                   list="popularJobsList"
                   required
                 />
@@ -216,21 +214,17 @@
 
             <!-- Target Company Name (Optional) -->
             <div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                 <label class="form-label" for="targetCompanyInput" style="font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:0;">
                   <i class="bi bi-building" style="color:var(--accent-orange);"></i> Target Company <span class="badge badge-purple" style="font-size:10.5px;font-weight:600;padding:2px 8px;">Optional</span>
                 </label>
               </div>
-              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                Adding a company (e.g. BRAC Bank, bKash, Google) allows AI to tailor requirements and resume keywords specifically to their hiring culture.
-              </p>
               <div class="input-wrapper">
                 <i class="bi bi-buildings input-icon"></i>
                 <input
                   type="text"
                   class="form-control"
                   id="targetCompanyInput"
-                  placeholder="e.g. BRAC Bank, bKash, Google, Grameenphone"
                   list="popularCompaniesList"
                 />
                 <datalist id="popularCompaniesList">
@@ -252,15 +246,12 @@
 
             <!-- Job Circular / Description (JD) (Optional) -->
             <div style="margin-top:16px;">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                 <label class="form-label" for="targetJobDescriptionInput" style="font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:0;">
                   <i class="bi bi-file-earmark-text" style="color:var(--accent-teal, #0d9488);"></i> Job Circular / Description (JD) 
                   <span class="badge badge-purple" style="font-size:10.5px;font-weight:600;padding:2px 8px;">Recommended for Match</span>
                 </label>
               </div>
-              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                Paste the circular from Bdjobs, LinkedIn, or employer's site. Gemini AI will match exact keywords, skills &amp; responsibilities line-by-line.
-              </p>
               <div class="input-wrapper" style="align-items:flex-start;">
                 <textarea
                   class="form-control"
