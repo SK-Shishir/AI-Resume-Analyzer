@@ -1,8 +1,5 @@
 import os
 import re
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from email_validator import validate_email, EmailNotValidError
 from dotenv import load_dotenv
 
@@ -77,46 +74,3 @@ def verify_email_validity(email: str):
             
     return True, normalized
 
-def send_verification_email(to_email: str, otp_code: str, user_name: str = "User"):
-    """
-    Attempts to send email via SMTP if configured in .env.
-    Returns (success: bool, info_message: str)
-    """
-    smtp_host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-    smtp_port = int(os.environ.get("SMTP_PORT", 587))
-    smtp_user = os.environ.get("SMTP_USER")
-    smtp_pass = os.environ.get("SMTP_PASSWORD")
-    
-    if not smtp_user or not smtp_pass or smtp_user.startswith("YOUR_"):
-        # SMTP not configured - log for demo/local environment
-        print(f"[DEMO EMAIL] Verification OTP for {to_email}: {otp_code}")
-        return False, "SMTP credentials not configured in backend/.env"
-        
-    try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"Your Verification Code: {otp_code} — Career Intelligence"
-        msg["From"] = f"Career Intelligence <{smtp_user}>"
-        msg["To"] = to_email
-        
-        html_content = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px;">
-            <h2 style="color: #7C3AED; margin-top: 0;">Career Intelligence</h2>
-            <p>Hello <strong>{user_name}</strong>,</p>
-            <p>Thank you for signing up. Please use the following 6-digit verification code to complete your registration:</p>
-            <div style="background: #F3F4F6; padding: 16px; text-align: center; border-radius: 8px; font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #1E293B; margin: 20px 0;">
-                {otp_code}
-            </div>
-            <p style="color: #64748B; font-size: 13px;">This code will expire in 15 minutes. If you did not request this, please disregard this email.</p>
-        </div>
-        """
-        msg.attach(MIMEText(html_content, "html"))
-        
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=8) as server:
-            server.starttls()
-            server.login(smtp_user, smtp_pass)
-            server.sendmail(smtp_user, [to_email], msg.as_string())
-            
-        return True, "Email sent successfully"
-    except Exception as e:
-        print(f"Error sending SMTP email to {to_email}: {e}")
-        return False, str(e)

@@ -1,15 +1,15 @@
 from flask import Blueprint, request, jsonify
 from config import supabase
-from services.email_verifier import verify_email_validity, send_verification_email
+from services.email_verifier import verify_email_validity
 import re
 import time
 import random
 
 auth_bp = Blueprint('auth', __name__)
 
-# Temporary in-memory OTP store for password reset & pending registrations
+# Temporary in-memory OTP store for password reset
 RESET_OTP_STORE = {}
-PENDING_REGISTRATIONS = {}
+
 
 # Email validation helper
 def is_valid_email(email):
@@ -43,123 +43,6 @@ def validate_email_endpoint():
     except Exception as e:
         print(f"[validate_email Error]: {e}")
         return jsonify({"valid": False, "error": str(e)}), 500
-
-@auth_bp.route('/register/send-otp', methods=['POST'])
-def register_send_otp():
-    """Validates email deliverability/domain, and generates a 6-digit registration OTP."""
-    try:
-        data = request.get_json() or {}
-        full_name = (data.get('full_name') or '').strip()
-        email = (data.get('email') or '').strip().lower()
-        password = data.get('password') or ''
-        
-        if not full_name or not email or not password:
-            return jsonify({"error": "Full name, email, and password are required."}), 400
-            
-        if len(full_name) < 2:
-            return jsonify({"error": "Full name must be at least 2 characters."}), 400
-            
-        if len(password) < 6:
-            return jsonify({"error": "Password must be at least 6 characters."}), 400
-            
-        # 1. Strict deliverability & domain existence check (DNS MX + Disposable filter + Provider rules)
-        is_valid, email_msg = verify_email_validity(email)
-        if not is_valid:
-            return jsonify({"error": email_msg}), 400
-        email = email_msg
-        
-        # 2. Check if already registered
-        if supabase:
-            existing = supabase.table('users').select('id').eq('email', email).execute()
-            if existing.data:
-                return jsonify({"error": "An account with this email address already exists. Please sign in."}), 409
-                
-        # 3. Generate 6-digit OTP
-        otp_code = f"{random.randint(100000, 999999)}"
-        PENDING_REGISTRATIONS[email] = {
-            "full_name": full_name,
-            "password": password,
-            "otp": otp_code,
-            "expires_at": time.time() + 900 # 15 minutes
-        }
-        
-        # 4. Attempt email dispatch via SMTP
-        sent, info = send_verification_email(email, otp_code, full_name)
-        
-        return jsonify({
-            "message": f"Verification code sent to {email}. Please check your inbox to activate your account.",
-            "email": email
-        }), 200
-        
-    except Exception as e:
-        print(f"Error in register_send_otp: {e}")
-        return jsonify({"error": f"Failed to send verification code: {str(e)}"}), 500
-
-@auth_bp.route('/register/verify-otp', methods=['POST'])
-def register_verify_otp():
-    """Verifies registration OTP and commits account to Supabase Auth and database."""
-    try:
-        data = request.get_json() or {}
-        email = (data.get('email') or '').strip().lower()
-        otp = (data.get('otp') or '').strip()
-        
-        if not email or not otp:
-            return jsonify({"error": "Email and verification code are required."}), 400
-            
-        record = PENDING_REGISTRATIONS.get(email)
-        if not record:
-            return jsonify({"error": "No pending registration found for this email. Please submit the registration form again."}), 400
-            
-        if time.time() > record["expires_at"]:
-            PENDING_REGISTRATIONS.pop(email, None)
-            return jsonify({"error": "Verification code has expired. Please try registering again."}), 400
-            
-        if record["otp"] != otp:
-            return jsonify({"error": "Invalid verification code. Please check the 6-digit code and try again."}), 400
-            
-        full_name = record["full_name"]
-        password = record["password"]
-        
-        # Register user with Supabase Auth
-        auth_response = supabase.auth.sign_up({
-            "email": email,
-            "password": password,
-            "options": {
-                "data": {
-                    "full_name": full_name
-                }
-            }
-        })
-        
-        user_id = auth_response.user.id
-        
-        # Insert user details into users table
-        supabase.table('users').insert({
-            "id": user_id,
-            "full_name": full_name,
-            "email": email,
-            "password_hash": password,
-            "role": "user"
-        }).execute()
-        
-        # Clean up pending record
-        PENDING_REGISTRATIONS.pop(email, None)
-        
-        return jsonify({
-            "message": "Email verified and account created successfully!",
-            "user": {
-                "id": user_id,
-                "email": email,
-                "full_name": full_name
-            }
-        }), 201
-        
-    except Exception as e:
-        error_msg = str(e)
-        if "User already registered" in error_msg:
-            return jsonify({"error": "Email is already registered. Please sign in."}), 409
-        print(f"Error in register_verify_otp: {e}")
-        return jsonify({"error": error_msg}), 500
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -226,21 +109,6 @@ def register():
         error_msg = str(e)
         if "User already registered" in error_msg:
             return jsonify({"error": "Email is already registered. Please sign in."}), 409
-        return jsonify({"error": error_msg}), 500
-        
-        return jsonify({
-            "message": "Registration successful!",
-            "user": {
-                "id": user_id,
-                "email": email,
-                "full_name": full_name
-            }
-        }), 201
-        
-    except Exception as e:
-        error_msg = str(e)
-        if "User already registered" in error_msg:
-            return jsonify({"error": "Email is already registered"}), 409
         return jsonify({"error": error_msg}), 500
 
 @auth_bp.route('/login', methods=['POST'])
